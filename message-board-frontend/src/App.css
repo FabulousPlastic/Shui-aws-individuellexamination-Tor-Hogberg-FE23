@@ -101,6 +101,23 @@ button:hover {
   color: #444;
 }
 
+#sort-order-selector {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#sort-order-selector label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+#sort-order-selector select {
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+
 /* Media Queries for Responsiveness */
 @media (max-width: 600px) {
   .container {

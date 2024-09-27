@@ -64,12 +64,14 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <h1>Message Board</h1>
+    <div className="container" id="app-container">
+      <h1 id="app-title">shuiMessages</h1>
       
       {/* New Message Form */}
-      <form onSubmit={handleSubmit}>
+      <form id="new-message-form" onSubmit={handleSubmit}>
         <input
+          id="new-message-username"
+          className="input"
           type="text"
           placeholder="Username"
           value={userId}
@@ -77,46 +79,51 @@ function App() {
           required
         />
         <textarea
+          id="new-message-content"
+          className="textarea"
           placeholder="Message"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           required
         />
-        <button type="submit">Send Message</button>
+        <button id="new-message-submit" className="button" type="submit">Send Message</button>
       </form>
 
       {/* User Search Form */}
-      <form onSubmit={handleUserSearch}>
+      <form id="user-search-form" onSubmit={handleUserSearch}>
         <input
+          id="search-user-id"
+          className="input"
           type="text"
-          placeholder="Enter User ID to Search"
+          placeholder="Enter User to Search"
           value={searchUserId}
           onChange={(e) => setSearchUserId(e.target.value)}
         />
-        <button type="submit">Search Messages by User</button>
+        <button id="search-user-submit" className="button" type="submit">Search Messages by User</button>
       </form>
 
       {/* Messages List */}
-      <div>
-        <h2>Messages</h2>
-        <ul>
+      <div id="messages-list-container">
+        <h2 id="messages-list-title">Messages</h2>
+        <ul id="messages-list" className="messages-list">
           {messages.map((message) => (
-            <li key={message.messageId}>
+            <li key={message.messageId} className="message-item">
               {editingMessageId === message.messageId ? (
                 // Edit message input
-                <div>
+                <div className="message-edit-container">
                   <textarea
-                    className="edit-message"
+                    id={`edit-message-${message.messageId}`}
+                    className="edit-message textarea"
                     value={newContent}
                     onChange={(e) => setNewContent(e.target.value)}
                   />
-                  <button onClick={() => handleSaveClick(message.messageId)}>Save</button>
+                  <button id={`save-message-${message.messageId}`} className="button" onClick={() => handleSaveClick(message.messageId)}>Save</button>
                 </div>
               ) : (
                 // Display message content
-                <div>
-                  <strong>{message.userId}</strong>: {message.content}
-                  <button className="edit-btn" onClick={() => handleEditClick(message)}>Edit</button>
+                <div className="message-content">
+                  <strong className="message-username">{message.userId}</strong>: {message.content}
+                  <button id={`edit-message-btn-${message.messageId}`} className="edit-btn button" onClick={() => handleEditClick(message)}>Edit</button>
                 </div>
               )}
             </li>

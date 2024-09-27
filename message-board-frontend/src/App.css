@@ -1,64 +1,121 @@
-/* App.css */
+/* General Styles */
 .container {
   padding: 20px;
   max-width: 600px;
   margin: 0 auto;
+  font-family: Arial, sans-serif;
 }
 
-h1 {
+h1, h2 {
   text-align: center;
-}
-
-form {
-  margin-bottom: 20px;
-}
-
-input,
-textarea {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
-  box-sizing: border-box;
+  color: #333;
 }
 
 button {
-  width: 100%;
-  padding: 10px;
   background-color: #007bff;
   color: white;
   border: none;
   cursor: pointer;
+  padding: 10px;
+  width: 100%;
+  border-radius: 4px;
+  margin-top: 10px;
 }
 
 button:hover {
   background-color: #0056b3;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  margin-bottom: 20px;
+/* Input and Textarea Styles */
+.input, .textarea {
+  width: 100%;
+  margin-bottom: 10px;
   padding: 10px;
+  box-sizing: border-box;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-li div {
+.textarea {
+  resize: none;
+  height: 100px;
+}
+
+.input:focus, .textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Message List */
+#messages-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.message-item {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+.message-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-textarea.edit-message {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
+/* Message Edit */
+.message-edit-container {
+  margin-top: 10px;
 }
 
-button.edit-btn {
-  padding: 5px;
-  margin-top: 10px;
+.edit-message {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.edit-btn {
+  width: 15%;
+  background-color: #ffc107;
+}
+
+.edit-btn:hover {
+  background-color: #e0a800;
+}
+
+/* Search Form */
+#user-search-form {
+  margin-bottom: 20px;
+}
+
+#user-search-form input {
+  margin-bottom: 10px;
+}
+
+#messages-list-title {
+  font-size: 1.5em;
+  color: #444;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 600px) {
+  .container {
+    padding: 10px;
+  }
+
+  button {
+    padding: 8px;
+  }
+
+  .input, .textarea {
+    padding: 8px;
+  }
+
+  .message-item {
+    padding: 8px;
+  }
 }

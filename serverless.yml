@@ -6,25 +6,6 @@ provider:
   runtime: nodejs20.x
   region: eu-north-1  # AWS region for your deployment
   
-  # httpApi:
-  #   cors:
-  #     allowOrigins:
-  #       - '*'  # Allow all origins, or specify your frontend URL (e.g., 'http://localhost:3000')
-  #     allowMethods:
-  #       - GET
-  #       - POST
-  #       - PUT
-  #       - OPTIONS
-  #     allowHeaders:
-  #       - Content-Type
-  #       - Authorization
-  #       - X-Amz-Date
-  #       - X-Api-Key
-  #       - X-Amz-Security-Token
-
-  environment:
-    MESSAGES_TABLE: shuiMessages  # Pass the table name as an environment variable
-  
   iam:
     role:
       statements:
@@ -38,47 +19,43 @@ provider:
             - dynamodb:DeleteItem
           Resource: "*"  # Scope this down to the actual table ARN in production
       # managedPolicies:
-      #   - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole  # Lambda execution policy
+      #   - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole  # Lambda execution policy  
+
+  httpApi:
+    cors:
+      allowedOrigins:
+        - '*'  # Allow all origins, or specify your frontend URL (e.g., 'http://localhost:3000')
+      allowedMethods:
+        - GET
+        - POST
+        - PUT
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+        - X-Amz-Date
+        - X-Api-Key
+        - X-Amz-Security-Token
+
+  environment:
+    MESSAGES_TABLE: shuiMessages  # Pass the table name as an environment variable
+  
+
 functions:
-  createMessage:
+  app:
     handler: handler.handler  # Express handler (single export)
     events:
       - httpApi:
           path: /message
           method: post
-  updateMessage:
-    handler: handler.handler  # Express handler (single export)
-    events:
       - httpApi:
           path: /message/{messageId}
           method: put
-  getMessages:
-    handler: handler.handler  # Express handler (single export)
-    events:
       - httpApi:
           path: /messages
           method: get
-  getMessagesByUser:
-    handler: handler.handler  # Express handler (single export)
-    events:
       - httpApi:
           path: /messages/user/{userId}
           method: get
-  # app:
-    # handler: handler.handler  # Express handler (single export)
-    # events:
-    #   - httpApi:
-    #       path: /message
-    #       method: post
-    #   - httpApi:
-    #       path: /message/{messageId}
-    #       method: put
-    #   - httpApi:
-    #       path: /messages
-    #       method: get
-    #   - httpApi:
-    #       path: /messages/user/{userId}
-    #       method: get
 
 resources:
   Resources:
@@ -106,9 +83,8 @@ resources:
 
 package:
   exclude:
-    - node_modules/aws-sdk/**  # Exclude AWS SDK as it's included in Lambda by default
+    - node_modules/aws-sdk/**
     - .git/**
     - .vscode/**
     - README.md
-    - package-lock.json
-    - message-board-frontend/**  # Exclude frontend as it's deployed separately to S3
+    - message-board-frontend/**

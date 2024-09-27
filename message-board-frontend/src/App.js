@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_BASE_URL } from './config'; // This should contain your API base URL
+import { API_BASE_URL } from './config';
+import './App.css'; 
 
 function App() {
   const [userId, setUserId] = useState('');
@@ -63,67 +64,59 @@ function App() {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
+    <div className="container">
       <h1>Message Board</h1>
       
       {/* New Message Form */}
-      <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Username"
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
           required
-          style={{ width: '100%', marginBottom: '10px', padding: '10px' }}
         />
         <textarea
           placeholder="Message"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           required
-          style={{ width: '100%', marginBottom: '10px', padding: '10px' }}
         />
-        <button type="submit" style={{ width: '100%', padding: '10px' }}>Send Message</button>
+        <button type="submit">Send Message</button>
       </form>
 
       {/* User Search Form */}
-      <form onSubmit={handleUserSearch} style={{ marginBottom: '20px' }}>
+      <form onSubmit={handleUserSearch}>
         <input
           type="text"
           placeholder="Enter User ID to Search"
           value={searchUserId}
           onChange={(e) => setSearchUserId(e.target.value)}
-          style={{ width: '100%', marginBottom: '10px', padding: '10px' }}
         />
-        <button type="submit" style={{ width: '100%', padding: '10px' }}>Search Messages by User</button>
+        <button type="submit">Search Messages by User</button>
       </form>
 
       {/* Messages List */}
       <div>
         <h2>Messages</h2>
-        <ul style={{ listStyleType: 'none', padding: 0 }}>
+        <ul>
           {messages.map((message) => (
-            <li key={message.messageId} style={{ marginBottom: '20px' }}>
+            <li key={message.messageId}>
               {editingMessageId === message.messageId ? (
                 // Edit message input
                 <div>
                   <textarea
+                    className="edit-message"
                     value={newContent}
                     onChange={(e) => setNewContent(e.target.value)}
-                    style={{ width: '100%', padding: '10px' }}
                   />
-                  <button onClick={() => handleSaveClick(message.messageId)} style={{ width: '100%', padding: '10px' }}>
-                    Save
-                  </button>
+                  <button onClick={() => handleSaveClick(message.messageId)}>Save</button>
                 </div>
               ) : (
                 // Display message content
                 <div>
                   <strong>{message.userId}</strong>: {message.content}
-                  <br />
-                  <button onClick={() => handleEditClick(message)} style={{ marginTop: '10px', padding: '5px' }}>
-                    Edit
-                  </button>
+                  <button className="edit-btn" onClick={() => handleEditClick(message)}>Edit</button>
                 </div>
               )}
             </li>

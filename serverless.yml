@@ -4,8 +4,7 @@ service: message-board-service
 provider:
   name: aws
   runtime: nodejs20.x
-  region: eu-north-1  # AWS region for your deployment
-  
+  region: eu-north-1  
   iam:
     role:
       statements:
@@ -19,12 +18,12 @@ provider:
             - dynamodb:DeleteItem
           Resource: "*"  # Scope this down to the actual table ARN in production
       # managedPolicies:
-      #   - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole  # Lambda execution policy  
+      #   - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole    
 
   httpApi:
     cors:
       allowedOrigins:
-        - '*'  # Allow all origins, or specify your frontend URL (e.g., 'http://localhost:3000')
+        - '*'  # Allow all origins.
       allowedMethods:
         - GET
         - POST
@@ -37,12 +36,12 @@ provider:
         - X-Amz-Security-Token
 
   environment:
-    MESSAGES_TABLE: shuiMessages  # Pass the table name as an environment variable
+    MESSAGES_TABLE: shuiMessages
   
 
 functions:
   app:
-    handler: handler.handler  # Express handler (single export)
+    handler: handler.handler
     events:
       - httpApi:
           path: /message

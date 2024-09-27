@@ -8,6 +8,7 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [editingMessageId, setEditingMessageId] = useState(null);
   const [newContent, setNewContent] = useState('');
+  const [searchUserId, setSearchUserId] = useState(''); // New state for user search
 
   // Fetch all messages from the API
   useEffect(() => {
@@ -51,6 +52,16 @@ function App() {
       .catch(error => console.error("Error updating message:", error));
   };
 
+  // Fetch messages for a specific user
+  const handleUserSearch = (e) => {
+    e.preventDefault();
+    if (!searchUserId) return;
+    
+    axios.get(`${API_BASE_URL}/messages/user/${searchUserId}`)
+      .then(response => setMessages(response.data))
+      .catch(error => console.error("Error fetching messages for user:", error));
+  };
+
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
       <h1>Message Board</h1>
@@ -73,6 +84,18 @@ function App() {
           style={{ width: '100%', marginBottom: '10px', padding: '10px' }}
         />
         <button type="submit" style={{ width: '100%', padding: '10px' }}>Send Message</button>
+      </form>
+
+      {/* User Search Form */}
+      <form onSubmit={handleUserSearch} style={{ marginBottom: '20px' }}>
+        <input
+          type="text"
+          placeholder="Enter User ID to Search"
+          value={searchUserId}
+          onChange={(e) => setSearchUserId(e.target.value)}
+          style={{ width: '100%', marginBottom: '10px', padding: '10px' }}
+        />
+        <button type="submit" style={{ width: '100%', padding: '10px' }}>Search Messages by User</button>
       </form>
 
       {/* Messages List */}
@@ -110,48 +133,5 @@ function App() {
     </div>
   );
 }
-// const [searchUserId, setSearchUserId] = useState(''); // New state for user search
-
-// // Fetch messages for a specific user
-// const handleUserSearch = (e) => {
-//   e.preventDefault();
-//   if (!searchUserId) return;
-  
-//   axios.get(`${API_BASE_URL}/messages/user/${searchUserId}`)
-//     .then(response => setMessages(response.data))
-//     .catch(error => console.error("Error fetching messages for user:", error));
-// };
-
-// return (
-//   <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-//     <h1>Message Board</h1>
-    
-//     {/* New User Search Form */}
-//     <form onSubmit={handleUserSearch} style={{ marginBottom: '20px' }}>
-//       <input
-//         type="text"
-//         placeholder="Enter User ID to Search"
-//         value={searchUserId}
-//         onChange={(e) => setSearchUserId(e.target.value)}
-//         style={{ width: '100%', marginBottom: '10px', padding: '10px' }}
-//       />
-//       <button type="submit" style={{ width: '100%', padding: '10px' }}>Search Messages by User</button>
-//     </form>
-
-//     {/* Messages List */}
-//     <div>
-//       <h2>Messages</h2>
-//       <ul style={{ listStyleType: 'none', padding: 0 }}>
-//         {messages.map((message) => (
-//           <li key={message.messageId} style={{ marginBottom: '20px' }}>
-//             <strong>{message.userId}</strong>: {message.content}
-//             <br />
-//             {/* Other message display code */}
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   </div>
-// );
 
 export default App;

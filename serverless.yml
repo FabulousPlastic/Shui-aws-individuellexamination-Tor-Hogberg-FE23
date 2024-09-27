@@ -37,8 +37,8 @@ provider:
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
           Resource: "*"  # Scope this down to the actual table ARN in production
-      managedPolicies:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole  # Lambda execution policy
+      # managedPolicies:
+      #   - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole  # Lambda execution policy
 functions:
   createMessage:
     handler: handler.handler  # Express handler (single export)
@@ -96,12 +96,12 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         GlobalSecondaryIndexes:
-          - IndexName: userId-index    # GSI for querying by userId
+          - IndexName: userId-index
             KeySchema:
               - AttributeName: userId
-                KeyType: HASH          # userId as partition key for GSI
+                KeyType: HASH
             Projection:
-              ProjectionType: ALL      # Project all attributes from the table
+              ProjectionType: ALL
 
 
 package:

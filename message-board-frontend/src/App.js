@@ -66,7 +66,6 @@ function App() {
   // Fetch messages for a specific user
   const handleUserSearch = (e) => {
     e.preventDefault();
-    if (!searchUserId) return;
     
     axios.get(`${API_BASE_URL}/messages/user/${searchUserId}`)
       .then(response => {
@@ -120,6 +119,7 @@ function App() {
           placeholder="Enter User to Search"
           value={searchUserId}
           onChange={(e) => setSearchUserId(e.target.value)}
+          required
         />
         <button id="search-user-submit" className="button" type="submit">Search Messages by User</button>
       </form>

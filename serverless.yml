@@ -4,8 +4,24 @@ service: message-board-service
 provider:
   name: aws
   runtime: nodejs20.x
-  region: eu-north-1
+  region: eu-north-1  # AWS region for your deployment
   
+  # httpApi:
+  #   cors:
+  #     allowOrigins:
+  #       - '*'  # Allow all origins, or specify your frontend URL (e.g., 'http://localhost:3000')
+  #     allowMethods:
+  #       - GET
+  #       - POST
+  #       - PUT
+  #       - OPTIONS
+  #     allowHeaders:
+  #       - Content-Type
+  #       - Authorization
+  #       - X-Amz-Date
+  #       - X-Api-Key
+  #       - X-Amz-Security-Token
+
   environment:
     MESSAGES_TABLE: shuiMessages  # Pass the table name as an environment variable
   
@@ -20,40 +36,49 @@ provider:
             - dynamodb:PutItem
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
-          Resource: "*"  # Scope this down as needed to the actual table ARN
-
+          Resource: "*"  # Scope this down to the actual table ARN in production
+      managedPolicies:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole  # Lambda execution policy
 functions:
   createMessage:
-    handler: handler.handler
+    handler: handler.handler  # Express handler (single export)
     events:
-      - http:
+      - httpApi:
           path: /message
           method: post
-          cors: true
-
   updateMessage:
-    handler: handler.handler
+    handler: handler.handler  # Express handler (single export)
     events:
-      - http:
+      - httpApi:
           path: /message/{messageId}
           method: put
-          cors: true
-
   getMessages:
-    handler: handler.handler
+    handler: handler.handler  # Express handler (single export)
     events:
-      - http:
+      - httpApi:
           path: /messages
           method: get
-          cors: true
-
   getMessagesByUser:
-    handler: handler.handler
+    handler: handler.handler  # Express handler (single export)
     events:
-      - http:
+      - httpApi:
           path: /messages/user/{userId}
           method: get
-          cors: true
+  # app:
+    # handler: handler.handler  # Express handler (single export)
+    # events:
+    #   - httpApi:
+    #       path: /message
+    #       method: post
+    #   - httpApi:
+    #       path: /message/{messageId}
+    #       method: put
+    #   - httpApi:
+    #       path: /messages
+    #       method: get
+    #   - httpApi:
+    #       path: /messages/user/{userId}
+    #       method: get
 
 resources:
   Resources:
@@ -71,17 +96,19 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         GlobalSecondaryIndexes:
-          - IndexName: userId-index
+          - IndexName: userId-index    # GSI for querying by userId
             KeySchema:
               - AttributeName: userId
-                KeyType: HASH
+                KeyType: HASH          # userId as partition key for GSI
             Projection:
-              ProjectionType: ALL
+              ProjectionType: ALL      # Project all attributes from the table
+
+
 package:
   exclude:
-    - node_modules/**
+    - node_modules/aws-sdk/**  # Exclude AWS SDK as it's included in Lambda by default
     - .git/**
     - .vscode/**
     - README.md
     - package-lock.json
-    - message-board-frontend/**
+    - message-board-frontend/**  # Exclude frontend as it's deployed separately to S3
